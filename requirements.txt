@@ -1,0 +1,16 @@
+# RabbitMQ client.
+aio-pika==8.2.5
+# Useful dataclasses.
+pydantic[dotenv]==1.10.2
+# Serialization to bytes.
+msgpack==1.0.4
+# PostgreSQL client.
+sqlalchemy==1.4.44
+# For async support of sqlalchemy.
+greenlet==2.0.1
+# PostgreSQL sync driver.
+psycopg2-binary==2.8.2
+# PostgreSQL async driver.
+asyncpg==0.27.0
+# PostgreSQL migrations.
+alembic==1.8.1

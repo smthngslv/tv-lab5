@@ -1,0 +1,69 @@
+version: "3"
+
+x-common: &common
+  restart: always
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "5"
+
+services:
+  producer:
+    image: smthngslv/tv-lab5:latest
+    container_name: l5-producer
+    build:
+      dockerfile: ./docker/lab5.Dockerfile
+      context: ./
+    environment:
+      - TV_LAB5_AMQP_URL=amqp://tv:tv@rabbitmq
+    command: bash -c "cd ./src && python main.py --producer"
+    depends_on:
+      - rabbitmq
+      - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 256M
+    <<: *common
+
+  consumer:
+    image: smthngslv/tv-lab5:latest
+    container_name: l5-consumer
+    build:
+      dockerfile: ./docker/lab5.Dockerfile
+      context: ./
+    environment:
+      - TV_LAB5_AMQP_URL=amqp://tv:tv@rabbitmq
+      - TV_LAB5_DATABASE_URL=postgresql+asyncpg://tv:tv@postgres
+    command: bash -c "cd ./src && alembic -c ../config/alembic.ini upgrade head && python main.py --consumer"
+    depends_on:
+      - rabbitmq
+      - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 256M
+    <<: *common
+
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: l5-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: tv
+      RABBITMQ_DEFAULT_PASS: tv
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    <<: *common
+
+  postgres:
+    image: postgres:latest
+    container_name: l5-postgres
+    environment:
+      POSTGRES_USER: tv
+      POSTGRES_PASSWORD: tv
+    ports:
+      - "5432:5432"
+    <<: *common
