@@ -1,11 +1,9 @@
-import os
 import re
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
-from alembic import context
 
 from lab5.settings import settings
 
@@ -18,9 +16,10 @@ config = context.config
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
-fileConfig(config.config_file_name)
+fileConfig(config.config_file_name)  # type: ignore
 
 from lab5.database.models import Base
+
 target_metadata = Base.metadata
 
 

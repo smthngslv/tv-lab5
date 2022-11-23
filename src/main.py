@@ -19,7 +19,7 @@ async def main() -> None:
             print(f'Produce {args.count} messages...', flush=True)
 
         async with Producer() as producer:
-            await producer.produce(count=args.count)
+            await producer.produce(count=args.count)  # type: ignore
 
         return None
 
@@ -27,7 +27,7 @@ async def main() -> None:
         print('Launching consumer...', flush=True)
 
         async with Consumer() as consumer:
-            await consumer.consume()
+            await consumer.consume()  # type: ignore
 
         return None
 

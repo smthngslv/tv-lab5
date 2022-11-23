@@ -42,11 +42,11 @@ class RabbitMQQueue:
             raise ValueError('Already connected.')
 
         # Connect to RabbitMQ.
-        self.__connection = await aio_pika.connect_robust(self.__amqp_url)
+        self.__connection = await aio_pika.connect_robust(self.__amqp_url)  # type: ignore
         # Create a channel. This is a communication channel inside TCP connection.
-        self.__channel = await self.__connection.channel()
+        self.__channel = await self.__connection.channel()  # type: ignore
         # Declare a queue. If queue already exists, this method does nothing.
-        self.__queue = await self.__channel.declare_queue(self.__queue_name)
+        self.__queue = await self.__channel.declare_queue(self.__queue_name)  # type: ignore
 
     async def disconnect(self) -> None:
         """
@@ -57,8 +57,8 @@ class RabbitMQQueue:
             raise ValueError('Already disconnected.')
 
         # Close connection and channel.
-        await self.__channel.close()
-        await self.__connection.close()
+        await self.__channel.close()  # type: ignore
+        await self.__connection.close()  # type: ignore
 
         self.__queue = None
         self.__channel = None
@@ -74,7 +74,9 @@ class RabbitMQQueue:
             raise ValueError('Not connected.')
 
         # Serialize message with msgpack and send it via default exchange with routing key equals to target queue name.
-        await self.__channel.default_exchange.publish(AioPikaMessage(message.msgpack()), routing_key=self.__queue_name)
+        await self.__channel.default_exchange.publish(  # type: ignore
+            AioPikaMessage(message.msgpack()), routing_key=self.__queue_name
+        )
 
     async def consume(self) -> AsyncGenerator[Message, None]:
         """
@@ -85,11 +87,11 @@ class RabbitMQQueue:
             raise ValueError('Not connected.')
 
         # Create queue iterator.
-        async with self.__queue.iterator() as iterator:
+        async with self.__queue.iterator() as iterator:  # type: ignore
             # Iterate over messages.
             async for message in iterator:
-                async with message.process():
-                    yield Message.parse_msgpack(message.body)
+                async with message.process():  # type: ignore
+                    yield Message.parse_msgpack(message.body)  # type: ignore
 
     async def __aenter__(self) -> 'RabbitMQQueue':
         """

@@ -6,7 +6,7 @@ import msgpack
 from pydantic import BaseModel, Field, parse_obj_as, parse_raw_as
 
 # Generic variable. I use it to annotate the code.
-T = TypeVar(name='T', bound=BaseModel)
+T = TypeVar(name='T', bound=BaseModel)  # type: ignore
 
 
 class MessageType(int, Enum):
@@ -33,13 +33,13 @@ class MessageBase(BaseModel):
         return msgpack.packb(self.dict(exclude_none=True))
 
     @classmethod
-    def parse_msgpack(cls: Type[T], data: bytes) -> T:
+    def parse_msgpack(cls: Type[T], data: bytes) -> T:  # type: ignore
         """
         Deserialize message from bytes, using msgpack.
         :param data: Serialized message in bytes.
         :return: Deserialized message.
         """
-        return cls.parse_obj(msgpack.unpackb(data))
+        return cls.parse_obj(msgpack.unpackb(data))  # type: ignore
 
 
 class RandomIntMessage(MessageBase):
@@ -78,7 +78,7 @@ Message.__dict__['parse_obj'] = partial(parse_obj_as, Message)
 # Second method - 'parse_raw' does same, but for any JSON string.
 Message.__dict__['parse_raw'] = partial(parse_raw_as, Message)
 # Third method - 'parse_msgpack' does same, but for any msgpacked bytes.
-Message.__dict__['parse_msgpack'] = lambda raw: Message.parse_obj(msgpack.unpackb(raw))
+Message.__dict__['parse_msgpack'] = lambda raw: Message.parse_obj(msgpack.unpackb(raw))  # type: ignore
 # Now, we can use Message as any other pydantic model. We can use Message.parse_msgpack(b'our serialized message') and
 # pydantic will automatically decode it from msgpack, determine the type, use right model to validate the data and
 # return instance of RandomIntMessage or RandomFloatMessage class, depending on type.

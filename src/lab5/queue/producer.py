@@ -21,9 +21,9 @@ class Producer(Base):
                 count -= 1
 
             if random.random() > 0.5:
-                message = RandomFloatMessage(data=random.random())
+                message = RandomFloatMessage(data=random.random())  # type: ignore
 
             else:
-                message = RandomIntMessage(data=random.randint(-2147483648, 2147483647))
+                message = RandomIntMessage(data=random.randint(-2147483648, 2147483647))  # type: ignore
 
             await self._queue.publish(message)

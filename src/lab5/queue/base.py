@@ -1,11 +1,11 @@
 from abc import ABC
-from typing import Type, TypeVar
+from typing import TypeVar
 
 from lab5.settings import settings
 from lab5.utils.rabbitmq_queue import RabbitMQQueue
 
 # Generic variable. I use it to annotate the code.
-T = TypeVar(name='T')
+T = TypeVar(name='T')  # type: ignore
 
 
 class Base(ABC):
@@ -33,12 +33,12 @@ class Base(ABC):
         """
         await self._queue.disconnect()
 
-    async def __aenter__(self: Type[T]) -> 'T':
+    async def __aenter__(self: T) -> 'T':  # type: ignore
         """
         Allows use this class in context manager
         :return: Self.
         """
-        await self._queue.connect()
+        await self._queue.connect()  # type: ignore
         return self
 
     async def __aexit__(self, *_) -> None:
