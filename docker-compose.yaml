@@ -16,6 +16,7 @@ services:
       context: ./
     environment:
       - TV_LAB5_AMQP_URL=amqp://tv:tv@rabbitmq
+      - TV_LAB5_DATABASE_URL=postgresql+asyncpg://tv:tv@postgres
     command: bash -c "cd ./src && python main.py --producer"
     depends_on:
       - rabbitmq
