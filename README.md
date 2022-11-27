@@ -136,4 +136,4 @@ We can check `RabbitMQ` stats:
 ![](./images/img.png)
 
 Same for `PostgreSQL`:
-![img.png](./images/img_2.png)
+![](./images/img_2.png)
