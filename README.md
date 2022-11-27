@@ -19,16 +19,16 @@ docker run tv-lab5-benchmark
 4. I don't have LXC from 4th lab, but here are results of Docker container benchmark:
    1. `sysbench --threads=$threads --time=60 cpu --cpu-max-prime=64000 run`, `$threads` = {2, 10, 100}
 
-       | Statistic   | 2 threads | 10 threads | 100 threads |
-       | ----------- | --------- | ---------- | ----------- |
-       | CPU event/s | 180.140   | 364.876    | 375.523     |
+        | Statistic   | 2 threads | 10 threads | 100 threads |
+        | ----------- | --------- | ---------- | ----------- |
+        | CPU event/s | 180.140   | 364.876    | 375.523     |
 
    2. `sysbench --num-threads=64 threads --thread-yields=100 --thread-locks=2 run`
        
-       | Statistic     | Value   |
-       | ------------- | ------- |
-       | Total time, s | 10.008  |
-       | Total events  | 30320.5 |
+        | Statistic     | Value   |
+        | ------------- | ------- |
+        | Total time, s | 10.008  |
+        | Total events  | 30320.5 |
    
    3. `sysbench --threads=$threads --time=60 memory --memory-oper=write run`, `$threads` = {2, 10, 100}
 
@@ -91,7 +91,7 @@ Now you can go to the http://localhost:15672' to RabbitMQ rates, use `tv`
 as login and password. Also, you can access PostgreSQL with same login and password.
 
 
-# Task 4
+# Task #4
 In `./k8s` I've declared same structure as in `docker-compose.yaml`.
 You can run it via
 ```shell
