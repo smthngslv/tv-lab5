@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-deploy
+  labels:
+    app: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:management-alpine
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: "tv"
+            - name: RABBITMQ_DEFAULT_PASS
+              value: "tv"
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672

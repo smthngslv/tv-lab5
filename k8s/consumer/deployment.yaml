@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer-deploy
+  labels:
+    app: consumer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      containers:
+        - name: consumer
+          image: smthngslv/tv-lab5:latest
+          command: ["/bin/bash"]
+          args:
+            [
+              "-c",
+              "cd ./src && alembic -c ../config/alembic.ini upgrade head && python main.py --consumer",
+            ]
+          env:
+            - name: TV_LAB5_AMQP_URL
+              value: "amqp://tv:tv@rabbitmq"
+            - name: TV_LAB5_DATABASE_URL
+              value: "postgresql+asyncpg://tv:tv@postgres"
+          resources:
+            limits:
+              cpu: 0.1
+              memory: 256M

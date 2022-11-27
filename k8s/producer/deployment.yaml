@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: producer-deploy
+  labels:
+    app: producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: producer
+  template:
+    metadata:
+      labels:
+        app: producer
+    spec:
+      containers:
+        - name: producer
+          image: smthngslv/tv-lab5:latest
+          command: ["/bin/bash"]
+          args: ["-c", "cd ./src && python main.py --producer"]
+          env:
+            - name: TV_LAB5_AMQP_URL
+              value: "amqp://tv:tv@rabbitmq"
+            - name: TV_LAB5_DATABASE_URL
+              value: "postgresql+asyncpg://tv:tv@postgres"
+          resources:
+            limits:
+              cpu: 0.1
+              memory: 256M
